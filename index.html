@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторная работа №10 - Работа с jQuery</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
+            transition: background-color 0.5s;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4a6fa5;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        h1 {
+            color: #64b5f6;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(100, 181, 246, 0.3);
+        }
+        
+        .subtitle {
+            color: #b0bec5;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            background-color: #1e1e1e;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            border: 1px solid #333;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+        }
+        
+        h2 {
+            color: #4fc3f7;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        h3 {
+            color: #bb86fc;
+        }
+        
+        ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+        
+        li:hover {
+            transform: translateX(5px);
+            border-left-color: #4fc3f7;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #2962ff 0%, #448aff 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 10px 0;
+            box-shadow: 0 4px 15px rgba(41, 98, 255, 0.3);
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, #448aff 0%, #2979ff 100%);
+            box-shadow: 0 6px 20px rgba(41, 98, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn:disabled {
+            background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #bb86fc;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 14px;
+            background-color: #2d2d2d;
+            border: 2px solid #444;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #e0e0e0;
+            transition: all 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #2962ff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(41, 98, 255, 0.2);
+            background-color: #333;
+        }
+        
+        .error {
+            border-color: #ff5252 !important;
+            background-color: #3a1c1c !important;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% {transform: translateX(0);}
+            10%, 30%, 50%, 70%, 90% {transform: translateX(-5px);}
+            20%, 40%, 60%, 80% {transform: translateX(5px);}
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+            color: #e8f5e9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            display: none;
+            border-left: 5px solid #4caf50;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+       
+        .even {
+            background-color: #424242 !important; 
+            color: #ffffff !important;
+        }
+        
+        .odd {
+            background-color: #ffffff !important; 
+            color: #000000 !important; 
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .inspiration {
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 5px solid #2962ff;
+        }
+        
+        .inspiration a {
+            color: #bbdefb;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .inspiration a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        
+        .highlight {
+            background-color: rgba(187, 134, 252, 0.2);
+            padding: 2px 8px;
+            border-radius: 5px;
+            color: #bb86fc;
+            font-weight: 600;
+        }
+        
+        .glow {
+            text-shadow: 0 0 10px rgba(100, 181, 246, 0.7);
+        }
+        
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+       
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            background: #444;
+            transform: rotate(30deg);
+        }
+        
+      
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(41, 98, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(41, 98, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(41, 98, 255, 0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        
+        #todoList li {
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    
+    <button class="theme-toggle" id="themeToggle">🌙</button>
+    
+    
+    <div class="stars" id="stars"></div>
+    
+    <header class="fade-in">
+        <h1>Лабораторная работа №10</h1>
+        <div class="subtitle">Работа с библиотекой jQuery</div>
+    </header>
+    
+    <main>
+        <div class="section fade-in">
+            <h2>Основное задание</h2>
+            <p>Подключите библиотеку jQuery и с ее помощью выполните задания.</p>
+            
+            <div class="inspiration">
+                <strong>Страница для вдохновения:</strong>
+                <a href="https://awwwards.com/websites/sites_of_the_day" target="_blank">Awwwards - Sites of the Day</a>
+                <p>Используйте элементы jQuery для своей страницы!</p>
+            </div>
+        </div>
+        
+        <div class="section fade-in">
+            <h2>Задание 1. Основы селекторов и манипуляций</h2>
+            <p>Создайте HTML-страницу со списком дел (<span class="highlight">&lt;ul&gt;</span>) и кнопкой.</p>
+            <p>При нажатии на кнопку:</p>
+            <ol>
+                <li>Измените текст заголовка страницы.</li>
+                <li>Покрасьте все четные элементы списка в серый цвет, а нечетные — в белый.</li>
+                <li>Добавьте в конец списка новый пункт «Изучить jQuery».</li>
+            </ol>
+            
+            <h3>Мой список дел</h3>
+            <ul id="todoList">
+                <li>Проснуться</li>
+                <li>Позавтракать</li>
+                <li>Пойти на пары</li>
+                <li>Сделать лабораторную работу</li>
+                <li>Пообедать</li>
+            </ul>
+            
+            <button id="changeListBtn" class="btn pulse">Выполнить первое задание</button>
+            
+           
+        </div>
+        
+        <div class="section fade-in">
+            <h2>Задание 2. Работа с событиями и формами</h2>
+            <p>Создайте форму с полями «Имя», «Пароль» и кнопкой «Отправить».</p>
+            <p>Реализуйте проверку: если поле «Имя» пустое при потере фокуса (blur), подсветите его красной рамкой.</p>
+            <p>При нажатии на кнопку «Отправить» выведите приветствие «Привет, [Имя]!» в отдельный <span class="highlight">&lt;div&gt;</span> под формой, не перезагружая страницу.</p>
+            
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="name">Имя:</label>
+                    <input type="text" id="name" name="name" placeholder="Введите ваше имя">
+                    <small style="color: #888; margin-top: 5px; display: block;">Поле должно быть заполнено</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" name="password" placeholder="Введите ваш пароль">
+                </div>
+                
+                <button type="submit" class="btn">Отправить</button>
+            </form>
+            
+            <div id="greeting" class="success-message">
+                
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer fade-in">
+        <p>Лабораторная работа выполнена с использованием библиотеки jQuery :)</p>
+        <p>© 2025, Все права защищены!!!!!!!!!!!!</p>
+    </footer>
+
+    <script>
+        $(document).ready(function() {
+            console.log("jQuery подключен и готов к работе!");
+            
+            
+            createStars();
+            
+          
+            $("#changeListBtn").click(function() {
+                
+                $("h1")
+                    .addClass("glow")
+                    .html("Лабораторная работа №10 - <span style='color:#bb86fc'>jQuery</span> в действии!")
+                    .css({color: "#64b5f6"});
+                
+              
+                $("#todoList li:even").addClass("even").removeClass("odd");
+                $("#todoList li:odd").addClass("odd").removeClass("even");
+                
+              
+                $("<li>Изучить jQuery</li>")
+                    .hide()
+                    .appendTo("#todoList")
+                    .fadeIn(1000);
+                
+                
+                let itemCount = $("#todoList li").length;
+                let lastItemIndex = itemCount - 1;
+                
+              
+                if (lastItemIndex % 2 === 0) {
+                    $("#todoList li:last").addClass("even").removeClass("odd");
+                } else {
+                    $("#todoList li:last").addClass("odd").removeClass("even");
+                }
+                
+               
+                $(this)
+                    .prop("disabled", true)
+                    .html("✓ Задание выполнено!")
+                    .removeClass("pulse")
+                    .css({
+                        "background": "linear-gradient(135deg, #2e7d32 0%, #4caf50 100%)",
+                        "box-shadow": "0 4px 15px rgba(46, 125, 50, 0.5)"
+                    });
+                
+               
+                $("#todoList li").each(function(index) {
+                    $(this).delay(index * 100).animate({
+                        opacity: 1,
+                        paddingLeft: "20px"
+                    }, 500);
+                });
+                
+                
+                console.log("Раскраска списка выполнена:");
+                console.log("- Четные элементы (even): серый фон (#424242)");
+                console.log("- Нечетные элементы (odd): белый фон (#ffffff) с черным текстом");
+            });
+            
+            
+            $("#name").blur(function() {
+                if ($(this).val().trim() === "") {
+                    $(this).addClass("error");
+                } else {
+                    $(this).removeClass("error");
+                }
+            });
+            
+           
+            $("#userForm").submit(function(event) {
+                
+                event.preventDefault();
+                
+               
+                let userName = $("#name").val().trim();
+                
+                
+                if (userName === "") {
+                    $("#name").addClass("error").focus();
+                    
+                   
+                    let errorMsg = $("<div>")
+                        .css({
+                            "background-color": "#d32f2f",
+                            "color": "#fff",
+                            "padding": "10px",
+                            "border-radius": "5px",
+                            "margin-top": "10px",
+                            "text-align": "center"
+                        })
+                        .text("Пожалуйста, введите ваше имя!")
+                        .hide()
+                        .insertAfter("#name")
+                        .fadeIn(300);
+                    
+                 
+                    setTimeout(() => {
+                        errorMsg.fadeOut(300, function() {
+                            $(this).remove();
+                        });
+                    }, 3000);
+                    
+                    return;
+                }
+                
+                
+                $("#greeting")
+                    .html(`
+                        <h3>Привет, <strong style="color:#bbdefb">${userName}</strong>!</h3>
+                        <p>Рады приветствовать вас на нашей странице. Ваш пароль успешно скрыт!</p>
+                        <p style="font-size:0.9em; margin-top:10px; color:#c8e6c9;">
+                            Мы успешно выполнили лабораторную работу с использованием jQuery (поставьте 10 автоматом пж)..
+                        </p>
+                    `)
+                    .slideDown(500)
+                    .css("display", "flex")
+                    .css("flex-direction", "column");
+                    
+              
+                $("#password").val("");
+                
+                
+                $("#userForm").css({
+                    "border": "2px solid #4caf50",
+                    "padding": "20px",
+                    "border-radius": "10px",
+                    "transition": "all 0.5s"
+                });
+                
+                
+                $("html, body").animate({
+                    scrollTop: $("#greeting").offset().top - 50
+                }, 800);
+            });
+            
+            
+            $(".btn").hover(
+                function() {
+                    if (!$(this).prop("disabled")) {
+                        $(this).css("transform", "translateY(-3px)");
+                    }
+                },
+                function() {
+                    if (!$(this).prop("disabled")) {
+                        $(this).css("transform", "translateY(0)");
+                    }
+                }
+            );
+            
+           
+            $(".fade-in").each(function(index) {
+                $(this).delay(200 * index).queue(function(next) {
+                    $(this).css("opacity", 0).animate({opacity: 1}, 800);
+                    next();
+                });
+            });
+            
+            
+            $("#themeToggle").click(function() {
+                
+                $(this).text($(this).text() === "🌙" ? "☀️" : "🌙");
+                
+               
+                $("body").animate({
+                    backgroundColor: $("body").css("background-color") === "rgb(18, 18, 18)" ? 
+                                    "#0a0a0a" : "#121212"
+                }, 500);
+                
+                
+                $(this).animate({rotate: "+=180deg"}, 300);
+            });
+            
+            
+            function createStars() {
+                const starsContainer = $("#stars");
+                const starCount = 100;
+                
+                for (let i = 0; i < starCount; i++) {
+                    const star = $("<div>").addClass("star");
+                    const size = Math.random() * 3 + 1;
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+                    const duration = Math.random() * 4 + 2;
+                    const delay = Math.random() * 5;
+                    
+                    star.css({
+                        width: `${size}px`,
+                        height: `${size}px`,
+                        left: `${x}%`,
+                        top: `${y}%`,
+                        animationDuration: `${duration}s`,
+                        animationDelay: `${delay}s`
+                    });
+                    
+                    starsContainer.append(star);
+                }
+            }
+            
+           
+            $("#todoList").on("click", "li", function() {
+                $(this).toggleClass("selected");
+                if ($(this).hasClass("selected")) {
+                    $(this).css("text-decoration", "line-through");
+                    $(this).append(' <span style="color:#4caf50">✓</span>');
+                } else {
+                    $(this).css("text-decoration", "none");
+                    $(this).find("span").remove();
+                }
+            });
+            
+            
+            $("h1, h2, h3").hover(
+                function() {
+                    $(this).css("text-shadow", "0 0 15px rgba(100, 181, 246, 0.7)");
+                },
+                function() {
+                    if (!$(this).hasClass("glow")) {
+                        $(this).css("text-shadow", "none");
+                    }
+                }
+            );
+        });
+    </script>
+</body>
+</html>
